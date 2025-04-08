@@ -1,0 +1,8 @@
+
+git init
+git add .
+git commit -m "Project Template"
+git branch -M main
+git remote add origin https://github.com/dumrul/ERP.git
+git remote -v
+git push -u origin main

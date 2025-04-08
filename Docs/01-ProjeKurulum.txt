@@ -1,0 +1,97 @@
+ERP klasörü oluştur.
+ERP klasörü altında Docs, ERPServer klasörleri oluştur.
+ERP>dotnet new .gitignore
+
+ERPServer
+-------------------
+ERP\ERPServer>dotnet new sln
+ERP\ERPServer>dotnet new nugetconfig
+
+ERP\ERPServer>dotnet new classlib -o ERPServer.Domain -f net8.0	(-o=output, -f=framework)
+ERP\ERPServer>dotnet new classlib -o ERPServer.Application -f net8.0
+ERP\ERPServer>dotnet new classlib -o ERPServer.Infrastructure -f net8.0
+ERP\ERPServer>dotnet new webapi -o ERPServer.WebAPI -f net8.0
+
+ERP\ERPServer>dotnet sln add ERPServer.Domain/ERPServer.Domain.csproj
+ERP\ERPServer>dotnet sln add ERPServer.Application/ERPServer.Application.csproj
+ERP\ERPServer>dotnet sln add ERPServer.Infrastructure/ERPServer.Infrastructure.csproj
+ERP\ERPServer>dotnet sln add ERPServer.WebAPI/ERPServer.WebAPI.csproj
+
+ERP\ERPServer\ERPServer.WebAPI\Properties> klasörü altında launchsettings.json dosyası güncelleme
+
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:5001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+ERPClient
+------------------
+
+ERP>npx -p @angular/cli@17.3.0 ng new ERPClient
+
+Bölüm			Açıklama
+npx			Paket çalıştırıcıdır.
+-p @angular/cli@17.3.0	Belirli bir versiyondaki Angular CLI (17.3.0) geçici olarak kullanılır.
+ng new ERPClient	Angular CLI içindeki ng komutu çalıştırılır ve yeni bir Angular projesi oluşturulur (ERPClient adında).
+
+
+ERP\ERPClient klasörü altında package-lock.json dosyasını sil ve package.json dosyası içinde alttaki kodları değiştir. Daha sonra
+node_modules klasörünü silip, ERP\ERPClient>npm install komutunu çalıştır. 
+
+  "dependencies": {
+    "@angular/animations": "^17.3.0",
+    "@angular/common": "^17.3.0",
+    "@angular/compiler": "^17.3.0",
+    "@angular/core": "^17.3.0",
+    "@angular/forms": "^17.3.0",
+    "@angular/platform-browser": "^17.3.0",
+    "@angular/platform-browser-dynamic": "^17.3.0",
+    "@angular/router": "^17.3.0",
+    "@sweetalert2/ngx-sweetalert2": "^12.3.0",
+    "form-validate-angular": "^17.0.1",
+    "jwt-decode": "^4.0.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.3"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^17.3.5",
+    "@angular/cli": "^17.3.5",
+    "@angular/compiler-cli": "^17.3.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.1.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.4.2"
+  }
+
+Concurrent İşlemleri
+-----------------------
+
+ERPClient altındaki package.json dosyasını güncelle:
+
+  "scripts": {
+    "start": "ng serve",
+    "start:backend": "cd ../ERPServer/ERPServer.WebAPI && dotnet run",
+    "start:frontend": "npm start",
+    "start:all": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+  }
+
+concurrently paketini yükle
+ERPClient>npm install concurrently
+
+ERPClient>npm run start:all
+✅ Bu yöntemle hem Web API hem de Angular tek bir komutla başlatılır.
